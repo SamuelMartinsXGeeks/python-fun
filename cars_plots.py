@@ -1,4 +1,5 @@
 # importing the required module
+from itertools import count
 from operator import indexOf
 import matplotlib.pyplot as plt
 
@@ -59,10 +60,10 @@ class CarCollection:
             key = str(getattr(car, attribute))
             if key in dictionary:
                 lst = list(dictionary[key])
-                list(dictionary[key]).append(car.name)
-                dictionary[key] = list(dictionary[key]).append(car.name)
+                lst.append(car)
+                dictionary[key] = lst
             else:
-                dictionary[key] = list([car.name])
+                dictionary[key] = list([car])
         return dictionary
 
 
@@ -77,23 +78,32 @@ for car in data:
                  car['Weight_in_lbs'], car['Acceleration'], car['Year'], car['Origin'])
     carList.add(newCar)
 
-print(carList.sorted_list_by('year'))
+sorted_by_year = carList.sorted_list_by('year')
+sorted_by_cylinders = carList.sorted_list_by('cylinders')
 
-# # x axis values
-# x = [1, 2, 3]
-# # corresponding y axis values
-# y = [2, 4, 1]
+# x axis values
+x = sorted_by_year.keys()
+# corresponding y axis values
+y = []
 
-# # plotting the points
-# plt.plot(x, y)
+for key in sorted_by_year.keys():
+    average_horsepower = 0
+    for car in sorted_by_year[key]:
+        average_horsepower += car.horsepower
+    cnt = len(sorted_by_year[key])
+    average_horsepower /= cnt
+    y.append(average_horsepower)
 
-# # naming the x axis
-# plt.xlabel('x - axis')
-# # naming the y axis
-# plt.ylabel('y - axis')
+# plotting the points
+plt.plot(x, y)
 
-# # giving a title to my graph
-# plt.title('My first graph!')
+# naming the x axis
+plt.xlabel('Year')
+# naming the y axis
+plt.ylabel('HorsePower')
 
-# # function to show the plot
-# plt.show()
+# giving a title to my graph
+plt.title('Average Horsepower over the years...')
+
+# function to show the plot
+plt.show()
